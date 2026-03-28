@@ -1,0 +1,39 @@
+SELECT users.name, orders.order_id, orders.status
+FROM users
+JOIN orders ON users.user_id = orders.user_id;
+SELECT products.name, categories.category_name
+FROM products
+JOIN categories ON products.category_id = categories.category_id;
+SELECT users.name, products.name, order_items.quantity
+FROM users
+JOIN orders ON users.user_id = orders.user_id
+JOIN order_items ON orders.order_id = order_items.order_id
+JOIN products ON order_items.product_id = products.product_id;
+SELECT orders.order_id,
+       SUM(products.price * order_items.quantity) AS total
+FROM orders
+JOIN order_items ON orders.order_id = order_items.order_id
+JOIN products ON order_items.product_id = products.product_id
+GROUP BY orders.order_id;
+SELECT users.name, payments.amount, payments.payment_method
+FROM payments
+JOIN orders ON payments.order_id = orders.order_id
+JOIN users ON orders.user_id = users.user_id;
+SELECT users.name,
+       orders.order_id,
+       orders.status,
+       products.name AS product,
+       order_items.quantity,
+       payments.amount
+FROM users
+JOIN orders ON users.user_id = orders.user_id
+JOIN order_items ON orders.order_id = order_items.order_id
+JOIN products ON order_items.product_id = products.product_id
+JOIN payments ON orders.order_id = payments.order_id;
+SELECT products.name,
+       SUM(order_items.quantity) AS total_sold
+FROM order_items
+JOIN products ON order_items.product_id = products.product_id
+GROUP BY products.name
+ORDER BY total_sold DESC
+LIMIT 1;
